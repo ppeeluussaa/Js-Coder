@@ -52,10 +52,11 @@ function agregarLibro(titulo, autor) {
 
 // Buscar libro por título
 function buscarLibro(tituloBuscado) {
-    const filtrados = libros.filter(libro => libro.titulo === tituloBuscado);
+    const filtrados = libros.filter(libro => 
+        libro.titulo.toLowerCase().includes(tituloBuscado.toLowerCase())
+    );
     mostrarLibros(filtrados);
 }
-
 // Eliminar libro por índice
 function eliminarLibro(index) {
     libros.splice(index, 1);
