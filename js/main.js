@@ -7,9 +7,11 @@ let libros = JSON.parse(localStorage.getItem('libros')) || [];
 
 // Referencias al DOM
 const listaLibros = document.getElementById('libros');
-const formAgregar = document.getElementById('formAgregar');
-const btnBuscar = document.getElementById('btnBuscar');
-const inputTituloBuscar = document.getElementById('buscarTitulo');
+const btnAgregar = document.getElementById('btn-agregar');
+const btnBuscar = document.getElementById('btn-buscar');
+const inputTitulo = document.getElementById('titulo');
+const inputAutor = document.getElementById('autor');
+const inputTituloBuscar = document.getElementById('titulo-buscar');
 
 // ------------------------------
 // Funciones
@@ -35,14 +37,14 @@ function mostrarLibros(lista) {
 // Agregar un libro
 function agregarLibro(titulo, autor) {
     if (!titulo || !autor) return;
-    libros.push({titulo, autor});
+    libros.push({ titulo, autor });
     localStorage.setItem('libros', JSON.stringify(libros));
     mostrarLibros(libros);
 }
 
 // Buscar libro por título
 function buscarLibro(tituloBuscado) {
-    const filtrados = libros.filter(libro => 
+    const filtrados = libros.filter(libro =>
         libro.titulo.toLowerCase().includes(tituloBuscado.toLowerCase())
     );
     mostrarLibros(filtrados);
@@ -59,13 +61,12 @@ function eliminarLibro(index) {
 // Eventos
 // ------------------------------
 
-formAgregar.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const titulo = document.getElementById('titulo').value;
-    const autor = document.getElementById('autor').value;
+btnAgregar.addEventListener('click', () => {
+    const titulo = inputTitulo.value;
+    const autor = inputAutor.value;
     agregarLibro(titulo, autor);
-    document.getElementById('titulo').value = '';
-    document.getElementById('autor').value = '';
+    inputTitulo.value = '';
+    inputAutor.value = '';
 });
 
 btnBuscar.addEventListener('click', () => {
