@@ -33,6 +33,15 @@ function mostrarLibros(lista) {
     `;
 }
 
+//Buscador Libros
+function buscarLibro(tituloBuscado) {
+    const filtrados = libros.filter(libro => 
+        libro.titulo.toLowerCase().includes(tituloBuscado.toLowerCase())
+    );
+    mostrarLibros(filtrados);
+}
+
+
 // Agregar un libro
 function agregarLibro(titulo, autor) {
     if (!titulo || !autor) return;
