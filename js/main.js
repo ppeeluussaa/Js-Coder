@@ -1,4 +1,4 @@
-    // ------------------------------
+// ------------------------------
 //   Simulador de Biblioteca 
 // ------------------------------
 
@@ -7,8 +7,9 @@ let libros = JSON.parse(localStorage.getItem('libros')) || [];
 
 // Referencias al DOM
 const listaLibros = document.getElementById('libros');
-const btnAgregar = document.getElementById('btn-agregar');
-const btnBuscar = document.getElementById('btn-buscar');
+const formAgregar = document.getElementById('formAgregar');
+const btnBuscar = document.getElementById('btnBuscar');
+const inputTituloBuscar = document.getElementById('buscarTitulo');
 
 // ------------------------------
 // Funciones
@@ -58,5 +59,20 @@ function eliminarLibro(index) {
 // Eventos
 // ------------------------------
 
-btnAgregar.addEventListener('click', () => {
-    const titulo = document.getElementById('titulo').va
+formAgregar.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const titulo = document.getElementById('titulo').value;
+    const autor = document.getElementById('autor').value;
+    agregarLibro(titulo, autor);
+    document.getElementById('titulo').value = '';
+    document.getElementById('autor').value = '';
+});
+
+btnBuscar.addEventListener('click', () => {
+    const tituloBuscado = inputTituloBuscar.value;
+    buscarLibro(tituloBuscado);
+    inputTituloBuscar.value = '';
+});
+
+// Mostrar libros al cargar la página
+mostrarLibros(libros);
