@@ -3,13 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <!-- Archivo JS -->
-    <script defer src="js/main.js"></script>
     <title>Simulador de Biblioteca</title>
+    <link rel="stylesheet" href="css/estilos.css">
+    <script defer src="js/main.js"></script>
 </head>
 <body>
     <h1>Simulador de Biblioteca</h1>
-    <p>Este simulador de biblioteca permite agregar libros, mostrar libros y buscar libros.
-        
+
+    <section id="agregar-libro">
+        <h2>Agregar Libro</h2>
+        <form id="formAgregar">
+            <input type="text" id="titulo" placeholder="Título" required>
+            <input type="text" id="autor" placeholder="Autor" required>
+            <button type="submit">Agregar Libro</button>
+        </form>
+    </section>
+
+    <section id="buscar-libro">
+        <h2>Buscar Libro</h2>
+        <input type="text" id="buscarTitulo" placeholder="Ingresa el título">
+        <button id="btnBuscar">Buscar</button>
+    </section>
+
+    <section id="lista-libros">
+        <h2>Libros en la Biblioteca</h2>
+        <ul id="libros"></ul>
+    </section>
 </body>
 </html>
