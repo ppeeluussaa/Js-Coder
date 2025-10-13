@@ -1,69 +1,76 @@
 // ------------------------------
-// Simulador de Biblioteca
+// Simulador de Biblioteca con DOM, Eventos y localStorage
 // ------------------------------
 
 // Array para almacenar libros
 let libros = JSON.parse(localStorage.getItem('libros')) || [];
 
+// Referencias al DOM
+const listaLibros = document.getElementById('lista-libros');
+const btnAgregar = document.getElementById('btn-agregar');
+const btnBuscar = document.getElementById('btn-buscar');
+
 // ------------------------------
 // Funciones
 // ------------------------------
 
-// Agregar libro
+// Mostrar todos los libros
+function mostrarLibros(lista) {
+    if (lista.length === 0) {
+        listaLibros.innerHTML = '<p>No hay libros en la biblioteca.</p>';
+        return;
+    }
+
+    listaLibros.innerHTML = `
+        <ul>
+        ${lista.map((libro, index) => `
+            <li>
+                Título: ${libro.titulo}, Autor: ${libro.autor}
+                <button onclick="eliminarLibro(${index})">Eliminar</button>
+            </li>
+        `).join('')}
+        </ul>
+    `;
+}
+
+// Agregar un libro
 function agregarLibro(titulo, autor) {
-    let libro = { titulo, autor }; // Usamos objeto para poder manipular más fácilmente
-    libros.push(libro);
-    guardarLibros();
+    if (!titulo || !autor) return;
+    libros.push({titulo, autor});
+    localStorage.setItem('libros', JSON.stringify(libros));
     mostrarLibros(libros);
 }
 
-// Mostrar libros
-function mostrarLibros(listaLibros) {
-    const lista = document.getElementById('libros');
-    if (listaLibros.length === 0) {
-        lista.innerHTML = "<li>No hay libros en la biblioteca.</li>";
-        return;
-    }
-    lista.innerHTML = listaLibros.map(libro => 
-        `<li>Título: ${libro.titulo}, Autor: ${libro.autor}</li>`
-    ).join('');
-}
-
-// Buscar libro
+// Buscar libro por título
 function buscarLibro(tituloBuscado) {
-    const resultado = libros.filter(libro => libro.titulo.toLowerCase() === tituloBuscado.toLowerCase());
-    mostrarLibros(resultado);
+    const filtrados = libros.filter(libro => libro.titulo === tituloBuscado);
+    mostrarLibros(filtrados);
 }
 
-// Guardar libros en localStorage
-function guardarLibros() {
+// Eliminar libro por índice
+function eliminarLibro(index) {
+    libros.splice(index, 1);
     localStorage.setItem('libros', JSON.stringify(libros));
+    mostrarLibros(libros);
 }
 
 // ------------------------------
 // Eventos
 // ------------------------------
 
-// Formulario agregar libro
-const formAgregar = document.getElementById('formAgregar');
-formAgregar.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const titulo = document.getElementById('titulo').value.trim();
-    const autor = document.getElementById('autor').value.trim();
-    if(titulo && autor) {
-        agregarLibro(titulo, autor);
-        formAgregar.reset();
-    }
+btnAgregar.addEventListener('click', () => {
+    const titulo = document.getElementById('titulo').value;
+    const autor = document.getElementById('autor').value;
+    agregarLibro(titulo, autor);
+    document.getElementById('titulo').value = '';
+    document.getElementById('autor').value = '';
 });
 
-// Botón buscar libro
-const btnBuscar = document.getElementById('btnBuscar');
-btnBuscar.addEventListener('click', function() {
-    const tituloBuscado = document.getElementById('buscarTitulo').value.trim();
-    if(tituloBuscado) {
-        buscarLibro(tituloBuscado);
-    }
+btnBuscar.addEventListener('click', () => {
+    const tituloBuscado = document.getElementById('titulo-buscar').value;
+    buscarLibro(tituloBuscado);
+    document.getElementById('titulo-buscar').value = '';
 });
 
 // Mostrar libros al cargar la página
-document.addEventListener('DOMContentLoaded', () => mostrarLibros(libros));
+mostrarLibros(libros);
