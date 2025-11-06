@@ -1,31 +1,43 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Simulador de Biblioteca</title>
-  <link rel="stylesheet" href="css/estilos.css">
-  <script defer src="js/main.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="script.js"></script>
 </head>
 <body>
-  <h1>Simulador de Biblioteca</h1>
+  <header>
+    <h1>📚 Simulador de Biblioteca</h1>
+  </header>
 
-  <section id="agregar-libro">
-    <h2>Agregar Libro</h2>
-    <input type="text" id="titulo" placeholder="Título" required>
-    <input type="text" id="autor" placeholder="Autor" required>
-    <button id="btn-agregar">Agregar Libro</button>
-  </section>
+  <main>
+    <section id="agregar-libro">
+      <h2>Agregar nuevo libro</h2>
+      <div class="form">
+        <input type="text" id="titulo" placeholder="Título del libro" />
+        <input type="text" id="autor" placeholder="Autor" />
+        <button id="btn-agregar">Agregar</button>
+      </div>
+    </section>
 
-  <section id="buscar-libro">
-    <h2>Buscar Libro</h2>
-    <input type="text" id="titulo-buscar" placeholder="Ingresa el título">
-    <button id="btn-buscar">Buscar</button>
-  </section>
+    <section id="buscar-libro">
+      <h2>Buscar libro</h2>
+      <div class="form">
+        <input type="text" id="titulo-buscar" placeholder="Buscar por título" />
+        <button id="btn-buscar">Buscar</button>
+      </div>
+    </section>
 
-  <section id="lista-libros">
-    <h2>Libros en la Biblioteca</h2>
-    <ul id="libros"></ul>
-  </section>
+    <section id="lista-biblioteca">
+      <h2>📖 Lista de libros en la biblioteca</h2>
+      <ul id="libros"></ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Proyecto Final - JavaScript | CoderHouse</p>
+  </footer>
 </body>
 </html>
