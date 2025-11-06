@@ -1,98 +1,109 @@
-// ------------------------------
-//   Simulador de Biblioteca 
-// ------------------------------
+class Libro {
+  constructor(titulo, autor, anio, genero, editorial, idioma, estado) {
+    this.titulo = titulo;
+    this.autor = autor;
+    this.anio = anio;
+    this.genero = genero;
+    this.editorial = editorial;
+    this.idioma = idioma;
+    this.estado = estado;
+  }
+}
 
-// Array para almacenar libros (si no hay, se precargan los de Harry Potter)
-let libros = JSON.parse(localStorage.getItem('libros')) || [
-  { titulo: "Harry Potter y la piedra filosofal", autor: "J.K. Rowling" },
-  { titulo: "Harry Potter y la cámara secreta", autor: "J.K. Rowling" },
-  { titulo: "Harry Potter y el prisionero de Azkaban", autor: "J.K. Rowling" },
-  { titulo: "Harry Potter y el cáliz de fuego", autor: "J.K. Rowling" },
-  { titulo: "Harry Potter y la Orden del Fénix", autor: "J.K. Rowling" },
-  { titulo: "Harry Potter y el misterio del príncipe", autor: "J.K. Rowling" },
-  { titulo: "Harry Potter y las reliquias de la muerte", autor: "J.K. Rowling" },
-  { titulo: "Animales fantásticos y dónde encontrarlos", autor: "J.K. Rowling" },
-  { titulo: "Los cuentos de Beedle el Bardo", autor: "J.K. Rowling" }
-];
+let libros = [];
 
-// Guardar en localStorage si aún no están
-if (!localStorage.getItem('libros')) {
+const listaLibros = document.getElementById('libros');
+const formInputs = {
+  titulo: document.getElementById('titulo'),
+  autor: document.getElementById('autor'),
+  anio: document.getElementById('anio'),
+  genero: document.getElementById('genero'),
+  editorial: document.getElementById('editorial'),
+  idioma: document.getElementById('idioma'),
+  estado: document.getElementById('estado')
+};
+
+document.getElementById('agregar').addEventListener('click', agregarLibro);
+document.getElementById('buscar').addEventListener('click', buscarLibro);
+document.getElementById('mostrarTodos').addEventListener('click', renderizarLibros);
+
+function guardarLibros() {
   localStorage.setItem('libros', JSON.stringify(libros));
 }
 
-// Referencias al DOM
-const listaLibros = document.getElementById('libros');
-const btnAgregar = document.getElementById('btn-agregar');
-const btnBuscar = document.getElementById('btn-buscar');
-const inputTitulo = document.getElementById('titulo');
-const inputAutor = document.getElementById('autor');
-const inputTituloBuscar = document.getElementById('titulo-buscar');
+function cargarLibros() {
+  const data = localStorage.getItem('libros');
+  if (data) {
+    libros = JSON.parse(data);
+    renderizarLibros();
+  } else {
+    fetch('data/libros.json')
+      .then(res => res.json())
+      .then(data => {
+        libros = data;
+        guardarLibros();
+        renderizarLibros();
+      });
+  }
+}
 
-// ------------------------------
-// Funciones
-// ------------------------------
+function agregarLibro() {
+  const { titulo, autor, anio, genero, editorial, idioma, estado } = formInputs;
 
-// Mostrar todos los libros
-function mostrarLibros(lista) {
-  if (lista.length === 0) {
-    listaLibros.innerHTML = '<li>No hay libros en la biblioteca.</li>';
+  if (!titulo.value.trim() || !autor.value.trim()) {
+    Swal.fire('Error', 'Debe completar al menos título y autor', 'error');
     return;
   }
 
-  listaLibros.innerHTML = lista.map((libro, index) => `
-      <li>
-        <strong>${libro.titulo}</strong> - ${libro.autor}
-        <br>
-        <button onclick="eliminarLibro(${index})">Eliminar</button>
-      </li>
+  const nuevoLibro = new Libro(
+    titulo.value,
+    autor.value,
+    anio.value,
+    genero.value,
+    editorial.value,
+    idioma.value,
+    estado.value
+  );
+
+  libros.push(nuevoLibro);
+  guardarLibros();
+  renderizarLibros();
+
+  Swal.fire('Éxito', 'Libro agregado correctamente', 'success');
+
+  Object.values(formInputs).forEach(input => (input.value = ''));
+}
+
+function buscarLibro() {
+  const termino = document.getElementById('busqueda').value.toLowerCase();
+  const filtrados = libros.filter(libro =>
+    libro.titulo.toLowerCase().includes(termino)
+  );
+
+  if (filtrados.length > 0) {
+    renderizarLibros(filtrados);
+  } else {
+    listaLibros.innerHTML = '<p>No se encontraron resultados.</p>';
+  }
+}
+
+function renderizarLibros(arr = libros) {
+  if (arr.length === 0) {
+    listaLibros.innerHTML = '<p>No hay libros para mostrar.</p>';
+    return;
+  }
+
+  listaLibros.innerHTML = arr.map(libro => `
+    <div class="card">
+      <h3>${libro.titulo}</h3>
+      <p><strong>Autor:</strong> ${libro.autor}</p>
+      <p><strong>Año:</strong> ${libro.anio || '—'}</p>
+      <p><strong>Género:</strong> ${libro.genero || '—'}</p>
+      <p><strong>Editorial:</strong> ${libro.editorial || '—'}</p>
+      <p><strong>Idioma:</strong> ${libro.idioma || '—'}</p>
+      <p><strong>Estado:</strong> ${libro.estado}</p>
+    </div>
   `).join('');
 }
 
-// Agregar un libro
-function agregarLibro(titulo, autor) {
-  if (!titulo || !autor) return alert("Por favor, completá todos los campos.");
-
-  const existe = libros.some(l => l.titulo.toLowerCase() === titulo.toLowerCase());
-  if (existe) return alert("Ese libro ya está en la biblioteca.");
-
-  libros.push({ titulo, autor });
-  localStorage.setItem('libros', JSON.stringify(libros));
-  mostrarLibros(libros);
-}
-
-// Buscar libro por título
-function buscarLibro(tituloBuscado) {
-  const filtrados = libros.filter(libro =>
-    libro.titulo.toLowerCase().includes(tituloBuscado.toLowerCase())
-  );
-  mostrarLibros(filtrados);
-}
-
-// Eliminar libro por índice
-function eliminarLibro(index) {
-  if (!confirm(`¿Seguro que querés eliminar "${libros[index].titulo}"?`)) return;
-  libros.splice(index, 1);
-  localStorage.setItem('libros', JSON.stringify(libros));
-  mostrarLibros(libros);
-}
-
-// ------------------------------
-// Eventos
-// ------------------------------
-
-btnAgregar.addEventListener('click', () => {
-  const titulo = inputTitulo.value.trim();
-  const autor = inputAutor.value.trim();
-  agregarLibro(titulo, autor);
-  inputTitulo.value = '';
-  inputAutor.value = '';
-});
-
-btnBuscar.addEventListener('click', () => {
-  const tituloBuscado = inputTituloBuscar.value.trim();
-  buscarLibro(tituloBuscado);
-  inputTituloBuscar.value = '';
-});
-
-// Mostrar libros al cargar la página
-mostrarLibros(libros);
+cargarLibros();

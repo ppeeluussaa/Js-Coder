@@ -1,42 +1,47 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simulador de Biblioteca</title>
-  <link rel="stylesheet" href="style.css" />
-  <script defer src="script.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script defer src="js/main.js"></script>
 </head>
 <body>
-  <header>
+  <header class="header">
     <h1>📚 Simulador de Biblioteca</h1>
   </header>
 
-  <main>
-    <section id="agregar-libro">
-      <h2>Agregar nuevo libro</h2>
-      <div class="form">
-        <input type="text" id="titulo" placeholder="Título del libro" />
-        <input type="text" id="autor" placeholder="Autor" />
-        <button id="btn-agregar">Agregar</button>
-      </div>
+  <main class="container">
+    <section class="formulario">
+      <input type="text" id="titulo" placeholder="Título">
+      <input type="text" id="autor" placeholder="Autor">
+      <input type="number" id="anio" placeholder="Año">
+      <input type="text" id="genero" placeholder="Género">
+      <input type="text" id="editorial" placeholder="Editorial">
+      <input type="text" id="idioma" placeholder="Idioma">
+      <select id="estado">
+        <option value="Disponible">Disponible</option>
+        <option value="Prestado">Prestado</option>
+        <option value="Pendiente">Pendiente</option>
+      </select>
+      <button id="agregar">Agregar libro</button>
     </section>
 
-    <section id="buscar-libro">
-      <h2>Buscar libro</h2>
-      <div class="form">
-        <input type="text" id="titulo-buscar" placeholder="Buscar por título" />
-        <button id="btn-buscar">Buscar</button>
-      </div>
+    <section class="buscador">
+      <input type="text" id="busqueda" placeholder="Buscar libro...">
+      <button id="buscar">Buscar</button>
+      <button id="mostrarTodos">Mostrar todos</button>
     </section>
 
-    <section id="lista-biblioteca">
+    <section class="lista">
       <h2>📖 Lista de libros en la biblioteca</h2>
-      <ul id="libros"></ul>
+      <div id="libros"></div>
     </section>
   </main>
 
-  <footer>
+  <footer class="footer">
     <p>Proyecto Final - JavaScript | CoderHouse</p>
   </footer>
 </body>
