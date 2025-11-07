@@ -10,7 +10,11 @@ class Libro {
   }
 }
 
-let libros = [];
+let libros = [
+  new Libro("Cien Años de Soledad", "Gabriel García Márquez", "1967", "Novela", "Sudamericana", "Español", "Disponible"),
+  new Libro("1984", "George Orwell", "1949", "Distopía", "Secker & Warburg", "Inglés", "Prestado"),
+  new Libro("El Principito", "Antoine de Saint-Exupéry", "1943", "Fábula", "Reynal & Hitchcock", "Francés", "Disponible")
+];
 
 const listaLibros = document.getElementById('libros');
 const formInputs = {
@@ -25,7 +29,7 @@ const formInputs = {
 
 document.getElementById('agregar').addEventListener('click', agregarLibro);
 document.getElementById('buscar').addEventListener('click', buscarLibro);
-document.getElementById('mostrarTodos').addEventListener('click', renderizarLibros);
+document.getElementById('mostrarTodos').addEventListener('click', () => renderizarLibros());
 
 function guardarLibros() {
   localStorage.setItem('libros', JSON.stringify(libros));
@@ -35,16 +39,8 @@ function cargarLibros() {
   const data = localStorage.getItem('libros');
   if (data) {
     libros = JSON.parse(data);
-    renderizarLibros();
-  } else {
-    fetch('data/libros.json')
-      .then(res => res.json())
-      .then(data => {
-        libros = data;
-        guardarLibros();
-        renderizarLibros();
-      });
   }
+  renderizarLibros();
 }
 
 function agregarLibro() {
@@ -52,6 +48,16 @@ function agregarLibro() {
 
   if (!titulo.value.trim() || !autor.value.trim()) {
     Swal.fire('Error', 'Debe completar al menos título y autor', 'error');
+    return;
+  }
+
+  const existe = libros.some(
+    libro => libro.titulo.toLowerCase() === titulo.value.toLowerCase() &&
+             libro.autor.toLowerCase() === autor.value.toLowerCase()
+  );
+
+  if (existe) {
+    Swal.fire('Error', 'Este libro ya existe', 'error');
     return;
   }
 
@@ -70,8 +76,7 @@ function agregarLibro() {
   renderizarLibros();
 
   Swal.fire('Éxito', 'Libro agregado correctamente', 'success');
-
-  Object.values(formInputs).forEach(input => (input.value = ''));
+  precargarFormulario();
 }
 
 function buscarLibro() {
@@ -87,13 +92,27 @@ function buscarLibro() {
   }
 }
 
+function cambiarEstado(index) {
+  const opciones = ['Disponible', 'Prestado', 'Pendiente'];
+  let nuevoEstado = prompt(`Ingrese el nuevo estado (${opciones.join(', ')})`);
+
+  if (nuevoEstado && opciones.includes(nuevoEstado)) {
+    libros[index].estado = nuevoEstado;
+    guardarLibros();
+    renderizarLibros();
+    Swal.fire('Éxito', 'Estado actualizado', 'success');
+  } else {
+    Swal.fire('Error', 'Estado no válido', 'error');
+  }
+}
+
 function renderizarLibros(arr = libros) {
   if (arr.length === 0) {
     listaLibros.innerHTML = '<p>No hay libros para mostrar.</p>';
     return;
   }
 
-  listaLibros.innerHTML = arr.map(libro => `
+  listaLibros.innerHTML = arr.map((libro, index) => `
     <div class="card">
       <h3>${libro.titulo}</h3>
       <p><strong>Autor:</strong> ${libro.autor}</p>
@@ -102,8 +121,20 @@ function renderizarLibros(arr = libros) {
       <p><strong>Editorial:</strong> ${libro.editorial || '—'}</p>
       <p><strong>Idioma:</strong> ${libro.idioma || '—'}</p>
       <p><strong>Estado:</strong> ${libro.estado}</p>
+      <button onclick="cambiarEstado(${index})">Cambiar Estado</button>
     </div>
   `).join('');
 }
 
+function precargarFormulario() {
+  formInputs.titulo.value = "Ejemplo de libro";
+  formInputs.autor.value = "Autor Ejemplo";
+  formInputs.anio.value = "2025";
+  formInputs.genero.value = "Ficción";
+  formInputs.editorial.value = "Editorial Demo";
+  formInputs.idioma.value = "Español";
+  formInputs.estado.value = "Disponible";
+}
+
+precargarFormulario();
 cargarLibros();
