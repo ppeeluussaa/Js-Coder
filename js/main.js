@@ -10,11 +10,7 @@ class Libro {
   }
 }
 
-let libros = [
-  new Libro("Cien Años de Soledad", "Gabriel García Márquez", "1967", "Novela", "Sudamericana", "Español", "Disponible"),
-  new Libro("1984", "George Orwell", "1949", "Distopía", "Secker & Warburg", "Inglés", "Prestado"),
-  new Libro("El Principito", "Antoine de Saint-Exupéry", "1943", "Fábula", "Reynal & Hitchcock", "Francés", "Disponible")
-];
+let libros = [];
 
 const listaLibros = document.getElementById('libros');
 const formInputs = {
@@ -31,16 +27,28 @@ document.getElementById('agregar').addEventListener('click', agregarLibro);
 document.getElementById('buscar').addEventListener('click', buscarLibro);
 document.getElementById('mostrarTodos').addEventListener('click', () => renderizarLibros());
 
-function guardarLibros() {
-  localStorage.setItem('libros', JSON.stringify(libros));
+async function cargarLibros() {
+  const guardados = localStorage.getItem('libros');
+
+  if (guardados) {
+    libros = JSON.parse(guardados);
+    renderizarLibros();
+    return;
+  }
+
+  try {
+    const response = await fetch('./data.json');
+    const data = await response.json();
+    libros = data;
+    guardarLibros();
+    renderizarLibros();
+  } catch (err) {
+    console.error("Error cargando el archivo JSON:", err);
+  }
 }
 
-function cargarLibros() {
-  const data = localStorage.getItem('libros');
-  if (data) {
-    libros = JSON.parse(data);
-  }
-  renderizarLibros();
+function guardarLibros() {
+  localStorage.setItem('libros', JSON.stringify(libros));
 }
 
 function agregarLibro() {
@@ -93,17 +101,24 @@ function buscarLibro() {
 }
 
 function cambiarEstado(index) {
-  const opciones = ['Disponible', 'Prestado', 'Pendiente'];
-  let nuevoEstado = prompt(`Ingrese el nuevo estado (${opciones.join(', ')})`);
-
-  if (nuevoEstado && opciones.includes(nuevoEstado)) {
-    libros[index].estado = nuevoEstado;
-    guardarLibros();
-    renderizarLibros();
-    Swal.fire('Éxito', 'Estado actualizado', 'success');
-  } else {
-    Swal.fire('Error', 'Estado no válido', 'error');
-  }
+  Swal.fire({
+    title: 'Cambiar estado',
+    input: 'select',
+    inputOptions: {
+      'Disponible': 'Disponible',
+      'Prestado': 'Prestado',
+      'Pendiente': 'Pendiente'
+    },
+    inputPlaceholder: 'Seleccionar nuevo estado',
+    showCancelButton: true
+  }).then(res => {
+    if (res.isConfirmed) {
+      libros[index].estado = res.value;
+      guardarLibros();
+      renderizarLibros();
+      Swal.fire('Éxito', 'Estado actualizado', 'success');
+    }
+  });
 }
 
 function renderizarLibros(arr = libros) {

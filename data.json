@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "titulo": "Harry Potter y la Piedra Filosofal",
+    "autor": "J.K. Rowling",
+    "anio": 1997,
+    "genero": "Fantasía",
+    "editorial": "Salamandra",
+    "idioma": "Español",
+    "estado": "Disponible"
+  },
+  {
+    "id": 2,
+    "titulo": "Harry Potter y la Cámara Secreta",
+    "autor": "J.K. Rowling",
+    "anio": 1998,
+    "genero": "Fantasía",
+    "editorial": "Salamandra",
+    "idioma": "Español",
+    "estado": "Disponible"
+  },
+  {
+    "id": 3,
+    "titulo": "Harry Potter y el Prisionero de Azkaban",
+    "autor": "J.K. Rowling",
+    "anio": 1999,
+    "genero": "Fantasía",
+    "editorial": "Salamandra",
+    "idioma": "Español",
+    "estado": "Disponible"
+  },
+  {
+    "id": 4,
+    "titulo": "Harry Potter y el Cáliz de Fuego",
+    "autor": "J.K. Rowling",
+    "anio": 2000,
+    "genero": "Fantasía",
+    "editorial": "Salamandra",
+    "idioma": "Español",
+    "estado": "Disponible"
+  },
+  {
+    "id": 5,
+    "titulo": "Harry Potter y la Orden del Fénix",
+    "autor": "J.K. Rowling",
+    "anio": 2003,
+    "genero": "Fantasía",
+    "editorial": "Salamandra",
+    "idioma": "Español",
+    "estado": "Disponible"
+  },
+  {
+    "id": 6,
+    "titulo": "Harry Potter y el Misterio del Príncipe",
+    "autor": "J.K. Rowling",
+    "anio": 2005,
+    "genero": "Fantasía",
+    "editorial": "Salamandra",
+    "idioma": "Español",
+    "estado": "Disponible"
+  },
+  {
+    "id": 7,
+    "titulo": "Harry Potter y las Reliquias de la Muerte",
+    "autor": "J.K. Rowling",
+    "anio"
