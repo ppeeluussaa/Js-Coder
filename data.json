@@ -63,4 +63,10 @@
     "id": 7,
     "titulo": "Harry Potter y las Reliquias de la Muerte",
     "autor": "J.K. Rowling",
-    "anio"
+    "anio": 2007,
+    "genero": "Fantasía",
+    "editorial": "Salamandra",
+    "idioma": "Español",
+    "estado": "Disponible"
+  }
+]
